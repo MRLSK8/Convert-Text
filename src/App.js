@@ -7,7 +7,8 @@ class App extends Component {
 
     this.state = {
       text: "",
-      isBinaryDecoderEnabled: false
+      isBinaryDecoderDisabled: true,
+      isBinaryParserDisabled: false
     }
 
     this.modifiedText = this.modifiedText.bind(this);
@@ -15,19 +16,19 @@ class App extends Component {
     this.binaryParser = this.binaryParser.bind(this);
   }
 
-  modifiedText = (e) => {
-    this.setState({text: e.target.value});
+  modifiedText = event => {
+    this.setState({text: event.target.value});
   }
 
-  binaryParser = e => {
+  binaryParser = event => {
     let ascii = [], binary = [];
     
-    [...e].map( ( _ , i) => ascii.push( e.charCodeAt(i) ) );
+    [...event].map( ( _ , i) => ascii.push( event.charCodeAt(i) ) );
 
     ascii.map( asciiCode => binary.push( asciiCode.toString(2) ) );
 
     this.setState({
-        text: ''
+      text: ''
       }, () => {
 
         let text = '';
@@ -44,7 +45,7 @@ class App extends Component {
 
         });
         
-        this.setState({ text, isBinaryDecoderEnabled: true });
+        this.setState({ text, isBinaryDecoderDisabled: false, isBinaryParserDisabled: true });
     });
 
   }
@@ -57,7 +58,7 @@ class App extends Component {
     text = '';
     string.map( char => text += char );
 
-    this.setState({ text, isBinaryDecoderEnabled: false });
+    this.setState({ text, isBinaryDecoderDisabled: true, isBinaryParserDisabled: false });
   }
 
   convertText(action){
@@ -68,22 +69,15 @@ class App extends Component {
     switch (action) {
       case "lower":
         message = text.toLowerCase();
-        break;
+      break;
       case "upper":
         message = text.toUpperCase();      
-        break;
+      break;
       default:
-        break;
+        console.log("Erro");
+      break;
     }
     this.setState({ text : message });
-  }
-
-  enableButtonBinaryDecoder = () => {
-    return  (<button onClick={() => this.binaryDecoder(this.state.text)}>Binary decoder</button>);
-  }
-
-  disableButtonBinaryDecoder = () => {
-    return  (<button disabled onClick={() => this.binaryDecoder(this.state.text)}>Binary decoder</button>);
   }
 
   render() {
@@ -93,8 +87,8 @@ class App extends Component {
         <div className="Buttons">
           <button onClick={() => this.convertText("lower")}>lowercase</button>
           <button onClick={() => this.convertText("upper")}>uppercase</button>
-          <button onClick={() => this.binaryParser(this.state.text)}>Binary parser</button>
-          {this.state.isBinaryDecoderEnabled ? this.enableButtonBinaryDecoder() : this.disableButtonBinaryDecoder()}
+          <button disabled={this.state.isBinaryParserDisabled} onClick={() => this.binaryParser(this.state.text)}>Binary parser</button>
+          <button disabled={this.state.isBinaryDecoderDisabled} onClick={() => this.binaryDecoder(this.state.text)}>Binary decoder</button>
         </div>
       </div>
     );

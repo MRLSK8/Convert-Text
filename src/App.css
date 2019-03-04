@@ -11,14 +11,16 @@
 }
 
 .textarea {
-  width: 80%;
-  height: 250px;
+  height: 351px;
+  width: 702px;
   font-size: 1.4rem;
   padding-left: 10px;
   padding-top: 7px;
+  resize: none;
 }
 
 button {
   border-radius: 5px;
   margin-left: 10px;
+  outline: none;
 }
