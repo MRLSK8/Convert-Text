@@ -17,3 +17,8 @@
   padding-left: 10px;
   padding-top: 7px;
 }
+
+button {
+  border-radius: 5px;
+  margin-left: 10px;
+}
