@@ -11,26 +11,59 @@ class App extends Component {
 
     this.modifiedText = this.modifiedText.bind(this);
     this.convertText = this.convertText.bind(this);
+    this.binaryParser = this.binaryParser.bind(this);
   }
 
   modifiedText = (e) => {
     this.setState({text: e.target.value});
   }
 
-  convertText(action){
-    let message = "";
+  binaryParser = e => {
+    let ascii = [], binary = [];
+    
+    [...e].map( ( _ , i) => ascii.push( e.charCodeAt(i) ) );
 
+    ascii.map( asciiCode => binary.push( asciiCode.toString(2) ) );
+
+    this.setState({
+        text: ''
+      }, () => {
+
+        let text = '';
+  
+        binary.map( binary => {
+            binary = binary.toString();
+
+            if( binary.length == 7 )
+              text += `0${binary} `;
+            else if (binary.length == 6)
+              text += `00${binary} `;
+            else
+              text += `${binary} `;
+
+        });
+        
+        this.setState({ text });
+    });
+
+  }
+
+  convertText(action){
+    const { text } = this.state;
+
+    let message = "";
+    
     switch (action) {
       case "lower":
-        message = this.state.text.toLowerCase();
-      break;
+        message = text.toLowerCase();
+        break;
       case "upper":
-        message = this.state.text.toUpperCase();      
-      break;
+        message = text.toUpperCase();      
+        break;
       default:
-      break;
+        break;
     }
-    this.setState({text:message});
+    this.setState({ text : message });
   }
 
   render() {
@@ -40,6 +73,7 @@ class App extends Component {
         <div className="Buttons">
           <button onClick={() => this.convertText("lower")}>lowercase</button>
           <button onClick={() => this.convertText("upper")}>uppercase</button>
+          <button onClick={() => this.binaryParser(this.state.text)}>Binary</button>
         </div>
       </div>
     );
